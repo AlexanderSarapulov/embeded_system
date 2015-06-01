@@ -1,2 +1,2 @@
 # embeded_system
-Embeded system labs
+Embeded system labs.
