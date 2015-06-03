@@ -1,8 +1,9 @@
 # embeded_system
 Embeded system labs.
-Equipment: -PS/2 mouse;
-	   -Arduino Uno board;
-	   -MI0283QT2 Display.
+Equipment: 
+* PS/2 mouse;
+* Arduino Uno board;
+* MI0283QT2 Display.
 
 How the project works.
 Mouse schould be wired to Arduino board (see how to do it in Project scheme.jpg file).
