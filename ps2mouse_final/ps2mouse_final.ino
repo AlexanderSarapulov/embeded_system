@@ -23,17 +23,17 @@ MI0283QT2 Display;
 
 
 // ----------------------------------------------------------------------------- VAR definishion----------------------------------------------------------------
-uint8_t counter = 0;
-uint8_t counter2 = 0;
-uint8_t counter3 = 0;
+uint8_t counter = 0;  //counter for the first button
+uint8_t counter2 = 0;  //counter for the second button
+uint8_t counter3 = 0;  //counter for the third button
 uint8_t counter4 = 0;
 PS2Mouse mouse(MOUSE_CLOCK, MOUSE_DATA, STREAM);
 
-  int left_button_pressed = 0;
-  int rigth_button_pressed = 0;
-  int global_status = 1 ;
-  int mstat_before = 0;
-  int prev_global_status = 0;
+  int left_button_pressed = 0;  //if left button was pressed = 1, if not = 0
+  int rigth_button_pressed = 0;   //if right button was pressed = 1, if not = 0
+  int global_status = 1 ;  //programm mode: 1 - Distance, 2 - Circle square, 3 - rectangle square
+  int mstat_before = 0;  // mouse status before
+  int prev_global_status = 0;//previous global status
   int printing_x = 0;
   int printing_y = 0;
   int data[2];
@@ -47,7 +47,7 @@ PS2Mouse mouse(MOUSE_CLOCK, MOUSE_DATA, STREAM);
 // to use an anonymous function, you have to enable C++11 in arduino:
 // http://stackoverflow.com/questions/16224746/how-to-use-c11-to-program-the-arduino
 
-GuiButton foo1(10,10,50,80, "Distance",
+GuiButton foo1(10,10,50,80, "Distance",              //the buttons are created
               [](void) -> void{counter++;});
 GuiButton foo2(80,10,50,80, "Circle sq", 
               [](void) -> void{counter2++;});   
@@ -56,7 +56,7 @@ GuiButton foo3(150,10,50,80, "Rect sq",
 // ----------------------------------------------------------------------------- subprograms----------------------------------------------------------------
 
 
-void mouse_init()
+void mouse_init()              //initialisation of mouse
         {
           mouse.write(0xff);  // reset
           mouse.read();  // ack byte
@@ -67,7 +67,7 @@ void mouse_init()
           delayMicroseconds(100);
         }
 
-void print_header(char* header)
+void print_header(char* header)    //function prints the header - name of programm mode
           {
           Display.setCursor(100, 30);
           Display.setTextSize(1);
@@ -82,7 +82,7 @@ void print_header(char* header)
           Display.print("              ");
 }
 
-void print_data(float data, char* measure_units){
+void print_data(float data, char* measure_units){      //data from mouse is printed on display
           Display.setCursor(100, 40);
           Display.setTextSize(2);
           Display.setTextColor(RGB(200,0,0), RGB(255,255,255));
@@ -90,7 +90,7 @@ void print_data(float data, char* measure_units){
           Display.println(measure_units);
 }
 
-void print_data_2(float data, char* measure_units){
+void print_data_2(float data, char* measure_units){    //data from mouse during the pause is printed on display
           Display.setCursor(100, 70);
           Display.setTextSize(1);
           Display.setTextColor(RGB(0,0,0), RGB(255,255,255));
@@ -100,7 +100,7 @@ void print_data_2(float data, char* measure_units){
           Display.println(measure_units);
 }
 
-void clear_print_data_2(){
+void clear_print_data_2(){        //function clears the message, that was showed in the pause
           Display.setCursor(100, 70);
           Display.setTextSize(1);
           Display.setTextColor(RGB(0,0,0), RGB(255,255,255));
@@ -110,7 +110,7 @@ void clear_print_data_2(){
           Display.println("              ");
 }
 
-void print_message(char* message){
+void print_message(char* message){          //message is printed on display
           Display.setCursor(100, 60);
           Display.setTextSize(1);
           Display.setTextColor(RGB(0,0,0), RGB(255,255,255));
@@ -119,7 +119,7 @@ void print_message(char* message){
           Display.println(message);
 }
 
-void print_instruction(){
+void print_instruction(){                //instructions are printed
           Display.setCursor(100, 160);
           Display.setTextSize(1);
           Display.setTextColor(RGB(0,0,0), RGB(255,255,255));
@@ -127,18 +127,18 @@ void print_instruction(){
           Display.println("Press right button to reset");
 }
 
-void check_mouse_button(int mstat){
+void check_mouse_button(int mstat){        //function checks mouse buttons
 
-        if ((mstat == 9) and (mstat_before!=9))
+        if ((mstat == 9) and (mstat_before!=9))//if left button was pressed
         {
-            if (left_button_pressed ==1) 
+            if (left_button_pressed ==1) //if left button was pressed before
             {
                 left_button_pressed = 0;
                 clear_print_data_2();
             }
             else 
             {
-                left_button_pressed = 1; 
+                left_button_pressed = 1; //left button was pressed only once
             }
             mstat_before=9;
         } 
@@ -146,9 +146,9 @@ void check_mouse_button(int mstat){
         {
             mstat_before = mstat;
         }
-        if ((mstat == 10)) //and (mstat_before!=10))
+        if ((mstat == 10)) //and (mstat_before!=10)) //if right button was pressed
         {
-          rigth_button_pressed = 1;
+          rigth_button_pressed = 1; //left button was pressed
         }
  }
 
@@ -157,7 +157,7 @@ void setup()
 {
       Display.begin();
       Display.touchStartCal(); // without this command the touchscreen driver won't work properly.
-      foo1.refresh();
+      foo1.refresh();          // buttons are refreshed
       foo2.refresh();
       foo3.refresh();
    //   foo4.refresh();
@@ -171,7 +171,7 @@ void setup()
 //-----------------------------------------------------------------------------------LOOP starts here ------------------------------------------------------
 void loop()
 {    
-    Display.touchRead();
+    Display.touchRead();      //reading touch data
     //delay(50);
     static touchpanelEvent_t e;
     e.x = Display.touchX();
@@ -230,7 +230,7 @@ void loop()
           mstat = mouse.read();
           mx = mouse.read();
           my = mouse.read();
-          if ((mstat == 9) and (mstat_before!=9))
+          if ((mstat == 9) and (mstat_before!=9)) //if left mouse pressed - pause, right - reset
           {
               if (left_button_pressed ==1) 
               {
@@ -264,7 +264,7 @@ void loop()
 //          delay(20);  /* twiddle */
                
                
-          if(mx+my != 0) 
+          if(mx+my != 0) //if mouse was moved
           {
  //          trigger=mx;
              printing_x = (mx);
@@ -273,16 +273,16 @@ void loop()
              total_distance_Y = total_distance_Y + abs(my);
              total_distance = total_distance + sqrt(((mx*mx) + (my*my)))/147*21.8;
           }
-          //print_data (total_distance,"mm");
+          //print_data (total_distance,"mm"); //sm!
           if (left_button_pressed !=1) 
           {
-             print_data (total_distance," mm");
+             print_data (total_distance," mm"); //sm
              print_message("       ");
           }
           else 
           {
              print_message("paused");
-             print_data_2(total_distance," mm");
+             print_data_2(total_distance," mm"); //sm
           }  
 
     }
