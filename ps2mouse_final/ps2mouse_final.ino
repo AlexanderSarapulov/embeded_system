@@ -19,7 +19,7 @@ MI0283QT2 Display;
 
 #include "colors.h"
 #include "GuiButton.h"
-//------------------------------------------------------------------------icludes are finished here---------------------------------------------------------
+//------------------------------------------------------------------------includes are finished here---------------------------------------------------------
 
 
 // ----------------------------------------------------------------------------- VAR definishion----------------------------------------------------------------
@@ -42,6 +42,7 @@ PS2Mouse mouse(MOUSE_CLOCK, MOUSE_DATA, STREAM);
   float total_distance = 0;
   float circle_sq = 0;
   float rectangle_sq = 0;
+  int correction_dist = 1177;
 
 
 // to use an anonymous function, you have to enable C++11 in arduino:
@@ -271,7 +272,7 @@ void loop()
              printing_y = (my);
              total_distance_X = total_distance_X + abs(mx);
              total_distance_Y = total_distance_Y + abs(my);
-             total_distance = total_distance + sqrt(((mx*mx) + (my*my)))/147*21.8;
+             total_distance = total_distance + sqrt(((mx*mx) + (my*my)))/147*21.8*1000/correction_dist;
           }
           //print_data (total_distance,"mm");
           if (left_button_pressed !=1) 
@@ -316,7 +317,7 @@ void loop()
 
         if( mx+my != 0) 
         {
-           total_distance = total_distance + sqrt(((mx*mx) + (my*my)))/147*21.8;
+           total_distance = total_distance + sqrt(((mx*mx) + (my*my)))/147*21.8*1000/correction_dist;
            circle_sq = (total_distance*total_distance)/100/4*3.141592;
         }
         if (left_button_pressed !=1) 
@@ -359,7 +360,7 @@ void loop()
         {
            total_distance_X = total_distance_X + abs(mx);
            total_distance_Y = total_distance_Y + abs(my);
-           rectangle_sq = (total_distance_X*total_distance_Y)/147*21.8/10/147*21.8/10; //rectangle square formuls in centimeters
+           rectangle_sq = (total_distance_X*total_distance_Y)/147*21.8/10/147*21.8/10*1000/correction_dist*1000/correction_dist; //rectangle square formuls in centimeters
         }
        if (left_button_pressed != 1) 
        {
